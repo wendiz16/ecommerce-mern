@@ -1,7 +1,7 @@
 const products = [
   {
     _id: '1',
-    name: 'Casual Handbag with Big Capacity',
+    name: 'Handbag with Big Capacity',
     image: '/imgs/bag-white.jpg',
     description:
       'This handbag is made of high quality cotton, lightweight, comfortable and durable. Makes you look not only fashionable, but also very casual.You can match any clothes, comfortable to carry and never go out of style.',
@@ -27,7 +27,7 @@ const products = [
   },
   {
     _id: '3',
-    name: 'Recycled Cotton Utility Backpack',
+    name: 'Cotton Utility Backpack',
     image: '/imgs/bagpack-white.jpg',
     description:
       'Has a sturdy and comfortable shoulder strap. No need to worry about quality.It can be used as a hiking backpack, causal travel daypack, high school or college bag, shopping daypack, work or office rucksack etc.',
