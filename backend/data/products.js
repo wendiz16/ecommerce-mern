@@ -1,6 +1,5 @@
 const products = [
   {
-    _id: '1',
     name: 'Handbag with Big Capacity',
     image: '/imgs/bag-white.jpg',
     description:
@@ -13,7 +12,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '2',
     name: 'Backpack Purse Nylon',
     image: '/imgs/bagpack-blue.jpg',
     description:
@@ -26,7 +24,6 @@ const products = [
     numReviews: 8,
   },
   {
-    _id: '3',
     name: 'Cotton Utility Backpack',
     image: '/imgs/bagpack-white.jpg',
     description:
@@ -39,7 +36,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '4',
     name: 'Handbag Flap Envelope',
     image: '/imgs/handbag-red.jpg',
     description:
@@ -52,7 +48,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '5',
     name: 'Handbag with Phone Pocket',
     image: '/imgs/handbag-yellow.jpg',
     description:
@@ -65,7 +60,6 @@ const products = [
     numReviews: 10,
   },
   {
-    _id: '6',
     name: 'Compact Sling Bag',
     image: '/imgs/slingbag-black.jpg',
     description:
