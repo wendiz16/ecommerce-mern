@@ -1,30 +1,28 @@
-import React,{useState,useEffect} from 'react';
+import React,{useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
 import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap';
-import Rating from '../components/Rating';
-import axios from 'axios';
-
+import Rating from '../components/Rating'
+import { listProductDetails } from '../actions/productActions';
+import Loader from '../components/Loader'
+import Message from '../components/Message'
 const ProductScreen = () => {
   // https://stackoverflow.com/questions/73729434/what-is-the-alternative-for-match-in-react-router-dom-v6
   const params=useParams();
   // const product = products.find((p)=>p._id===params.id)
-  const [product,setProduct]=useState({});
-  
+  const productDetails=useSelector(state=>state.productDetails)
+  const{loading, error, product} =productDetails
+  const dispatch=useDispatch()
   useEffect(()=>{
-    const getProduct= async ()=>{
-     const {data} = await axios.get(`/api/products/${params.id}`);
-     setProduct(data);
-    }
-    getProduct()
-  },[params.id])
-
+    dispatch(listProductDetails(params.id))
+  },[dispatch, params.id])
+  
   return (
-  //  <div>{product.name}</div>
   <>
     <Link className='btn btn-light my-3'to='/'>
       Go Back
     </Link>
-    <Row>
+    {loading ?<Loader/>: error ?<Message variant='danger'>{error}</Message>:(<Row>
       <Col md={6}>
         <Image src={product.image} alt={product.name} fluid></Image>
       </Col>
@@ -72,7 +70,8 @@ const ProductScreen = () => {
           </ListGroup>
         </Card>
       </Col>
-    </Row>
+    </Row>)}
+    
   </>
   )
 }
