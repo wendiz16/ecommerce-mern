@@ -8,7 +8,7 @@ import { listProductDetails } from '../actions/productActions';
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 const ProductScreen = () => {
-  const [qty,setQty]=useState(0)
+  const [qty,setQty]=useState(1)
   // https://stackoverflow.com/questions/73729434/what-is-the-alternative-for-match-in-react-router-dom-v6
   const params=useParams();
   let navigate=useNavigate()
