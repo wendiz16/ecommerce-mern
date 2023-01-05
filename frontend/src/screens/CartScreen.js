@@ -1,6 +1,6 @@
 import React, {useEffect}from 'react'
 import {useDispatch,useSelector} from 'react-redux'
-import {useParams,useSearchParams,Link} from 'react-router-dom';
+import {useParams,useSearchParams,Link,useNavigate} from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import {Row, Col, ListGroup,Image, Button,Card, ListGroupItem} from 'react-bootstrap'
 import Message from '../components/Message'
@@ -9,6 +9,7 @@ import {addToCart} from '../actions/cartActions'
 
 const CartScreen = () => {
   const params=useParams();
+  let navigate=useNavigate()
   const productId= params.id
   //https://stackoverflow.com/questions/73262988/react-router-v6-history-location-search-replacement
   const [searchParams, setSearchParams]= useSearchParams()
@@ -26,6 +27,10 @@ const CartScreen = () => {
 
   const removeFromCartHandler=(id)=>{
     console.log('remove')
+  }
+
+  const checkoutHandler = ()=>{
+    navigate('/login?redirect=shipping')
   }
   return (
    <Row>
@@ -75,6 +80,15 @@ const CartScreen = () => {
         <ListGroup variant="flush">
           <ListGroupItem>
             <h2>Subtotal({cartItems.reduce((acc,item)=>acc+item.qty,0)}) Items</h2>
+            $
+            {cartItems.reduce((acc,item)=>acc+item.qty*item.price,0).toFixed(2)
+            }
+          </ListGroupItem>
+          <ListGroupItem>
+            <Button type='button' className='btn-block' disabled={cartItems.length===0}
+            onClick={checkoutHandler}>
+              Proceed to Checkout
+            </Button>
           </ListGroupItem>
         </ListGroup>
       </Card>
