@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react'
-import { Link, redirect,useSearchParams, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation} from "react-router-dom"
 import Form from 'react-bootstrap/Form';
 import {Row, Col, Button} from 'react-bootstrap'
 import { useDispatch,useSelector } from 'react-redux';
@@ -8,24 +8,27 @@ import Loader from "../components/Loader"
 import { login } from '../actions/userActions';
 import FormContainer from '../components/FormContainer';
 const LoginScreen = () => {
-
+  let location = useLocation();
   let navigate = useNavigate();
   const [email, setEmail]=useState('')
   const [password, setPassword]=useState('')
-  const [searchParams, setSearchParams]= useSearchParams()
-  const redirect = [...searchParams][0] ? `/${[...searchParams][0][1]}` : '/'
+  // const [searchParams, setSearchParams]= useSearchParams()
+  // const redirect = [...searchParams][0] ? `/${[...searchParams][0][1]}` : '/'
+  const redirect =  location.search ? location.search.split('=')[1] : '/'
   const dispatch= useDispatch()
   const userLogin = useSelector(state=>state.userLogin)
   const {loading, error, userInfo}=userLogin
   useEffect(()=>{
     if(userInfo){
       navigate(redirect)
+      console.log('hi')
     }
-  },[userInfo,redirect])
+  },[userInfo,location,redirect])
   const submitHandler=(e)=>{
     e.preventDefault()
     //Dispatch login
     dispatch(login(email,password))
+    console.log(location)
   }
   return (
    <FormContainer>
@@ -50,7 +53,8 @@ const LoginScreen = () => {
     </Form>
     <Row className='py-3'>
       <Col>
-        New User?<Link to={redirect?`/register?register=${redirect}`:'/register'}>Register</Link>
+        New User?{' '}
+        <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>Register</Link>
       </Col>
     </Row>
    </FormContainer>

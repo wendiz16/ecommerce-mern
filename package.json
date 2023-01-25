@@ -29,7 +29,9 @@
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.7.2"
+    "mongoose": "^6.7.2",
+    "os-browserify": "^0.3.0",
+    "utils": "^0.2.2"
   },
   "devDependencies": {
     "concurrently": "^7.5.0",
