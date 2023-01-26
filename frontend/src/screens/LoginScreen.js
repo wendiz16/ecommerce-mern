@@ -10,25 +10,24 @@ import FormContainer from '../components/FormContainer';
 const LoginScreen = () => {
   let location = useLocation();
   let navigate = useNavigate();
+  let url = location.search
   const [email, setEmail]=useState('')
   const [password, setPassword]=useState('')
   // const [searchParams, setSearchParams]= useSearchParams()
   // const redirect = [...searchParams][0] ? `/${[...searchParams][0][1]}` : '/'
-  const redirect =  location.search ? location.search.split('=')[1] : '/'
+  const redirect =  url ? url.split('=')[1] : '/'
   const dispatch= useDispatch()
   const userLogin = useSelector(state=>state.userLogin)
   const {loading, error, userInfo}=userLogin
   useEffect(()=>{
     if(userInfo){
       navigate(redirect)
-      console.log('hi')
     }
-  },[userInfo,location,redirect])
+  },[userInfo, navigate, redirect])
   const submitHandler=(e)=>{
     e.preventDefault()
     //Dispatch login
     dispatch(login(email,password))
-    console.log(location)
   }
   return (
    <FormContainer>

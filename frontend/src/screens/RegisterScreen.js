@@ -11,6 +11,7 @@ const RegisterScreen = () => {
   
   let navigate = useNavigate();
   let location= useLocation();
+  let url = location.search
   const [name, setName]=useState('')
   const [email, setEmail]=useState('')
   const [password, setPassword]=useState('')
@@ -18,19 +19,19 @@ const RegisterScreen = () => {
   const [message, setMessage]=useState(null)
   // const [searchParams, setSearchParams]= useSearchParams()
   // const redirect = [...searchParams][0] ? `/${[...searchParams][0][1]}` : '/'
-  const redirect = location.search? location.search.split('=')[1] : '/'
   const dispatch= useDispatch()
-  const userRegister = useSelector(state=>state.userRegister)
+  const userRegister = useSelector((state)=>state.userRegister)
   const {loading, error, userInfo}=userRegister
+  const redirect = url? url.split('=')[1] : '/'
   useEffect(()=>{
     if(userInfo){
       navigate(redirect)
       console.log('hello')
     }
-  },[location,userInfo,redirect])
+  },[navigate, userInfo,redirect])
   const submitHandler=(e)=>{
     e.preventDefault()
-    console.log(location)
+    // console.log(location)
     //Dispatch register
     if(!name&!password&!email&!confirmPassword){
       setMessage('please enter your info')
