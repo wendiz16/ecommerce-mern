@@ -36,7 +36,7 @@ const CartScreen = () => {
    <Row>
      <Col md={8}>
       <h1>Shopping Cart</h1>
-      {cartItems.length===0?<Message>Your cart is empty <Link to='/'>Go Back</Link></Message>:(
+      {cartItems.length===0?(<Message>Your cart is empty <Link to='/'>Go Back</Link></Message>):(
         <ListGroup variant='flush'>
           {cartItems.map((item)=>(
             <ListGroup.Item key={item.product}>
@@ -80,9 +80,7 @@ const CartScreen = () => {
         <ListGroup variant="flush">
           <ListGroupItem>
             <h2>Subtotal({cartItems.reduce((acc,item)=>acc+item.qty,0)}) Items</h2>
-            $
-            {cartItems.reduce((acc,item)=>acc+item.qty*item.price,0).toFixed(2)
-            }
+            ${cartItems.reduce((acc,item)=>acc+item.qty*item.price,0).toFixed(2)}
           </ListGroupItem>
           <ListGroupItem>
             <Button type='button' className='btn-block' disabled={cartItems.length===0}
