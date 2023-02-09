@@ -1,17 +1,17 @@
 import React,{useState, useEffect} from 'react'
-import { Link, useNavigate, useLocation} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Form from 'react-bootstrap/Form';
 import {Row, Col, Button} from 'react-bootstrap'
 import { useDispatch,useSelector } from 'react-redux';
 import Message from "../components/Message"
 import Loader from "../components/Loader"
-import { getUserDetails} from '../actions/userActions';
+import { getUserDetails,updateUserProfile} from '../actions/userActions';
 
 const ProfileScreen = () => {
   
   let navigate = useNavigate();
-  let location= useLocation();
-  let url = location.search
+  // let location= useLocation();
+  // let url = location.search
   const [name, setName]=useState('')
   const [email, setEmail]=useState('')
   const [password, setPassword]=useState('')
@@ -24,11 +24,21 @@ const ProfileScreen = () => {
   
   const userLogin= useSelector((state)=>state.userLogin)
   const {userInfo}=userLogin
+
+  const userUpdate= useSelector((state)=>state.userUpdate)
+  const {success}=userUpdate
   useEffect(()=>{
-    if(userInfo){
+    if(!userInfo){
       navigate('/login')
+    }else{
+      if(!user.name){
+        dispatch(getUserDetails('profile'))
+      }else{
+        setName(user.name)
+        setEmail(user.email)
+      }
     }
-  },[navigate, userInfo,redirect])
+  },[dispatch, navigate, userInfo,user])
   const submitHandler=(e)=>{
     e.preventDefault()
     // console.log(location)
@@ -39,21 +49,24 @@ const ProfileScreen = () => {
     if(password!==confirmPassword){
       setMessage("Passwords do not match")
     }else{
-      dispatch(register(name, email, password ))
+      //dispatch updateproflie 
+      dispatch(updateUserProfile({id:user._id,name, email, password}))
     }
   }
   return (
-   <FormContainer>
-    <h1>Sign Up</h1>
-    {message &&<Message variant='danger'>{message}</Message>}
-    {error &&<Message variant='danger'>{error}</Message>}
-    {loading &&<Loader/>}
-    <Form onSubmit={submitHandler}>
-      <Form.Group controlId='name'>
-        <Form.Label>Name</Form.Label>
-        <Form.Control type='name' placeholder='Enter your name' value={name}
-        onChange={(e)=>setName(e.target.value)}></Form.Control>
-      </Form.Group>
+    <Row>
+      <Col md={3}>
+        <h2>User Profile</h2>
+        {message &&<Message variant='danger'>{message}</Message>}
+       {error &&<Message variant='danger'>{error}</Message>}
+       {success &&<Message variant='success'>Profile Updated</Message>}
+        {loading &&<Loader/>}
+       <Form onSubmit={submitHandler}>
+         <Form.Group controlId='name'>
+           <Form.Label>Name</Form.Label>
+            <Form.Control type='name' placeholder='Enter your name' value={name}
+             onChange={(e)=>setName(e.target.value)}></Form.Control>
+        </Form.Group>
       
       <Form.Group controlId='email'>
         <Form.Label>Email</Form.Label>
@@ -73,16 +86,16 @@ const ProfileScreen = () => {
         onChange={(e)=>setConfirmPassword(e.target.value)}></Form.Control>
       </Form.Group>
       <Button type='submit' variant='primary' className='my-3'>
-        Register
+        Update
       </Button>
-    </Form>
-    <Row className='py-3'>
-      <Col>
-        Registered Already?{' '}
-        <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>LogIn</Link>
+     </Form>
+        
+      </Col>
+      <Col md={9}>
+        <h2>My Orders</h2>
       </Col>
     </Row>
-   </FormContainer>
+
   )
 }
 
