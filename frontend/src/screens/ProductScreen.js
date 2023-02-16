@@ -10,7 +10,7 @@ import Message from '../components/Message'
 const ProductScreen = () => {
   const [qty,setQty]=useState(1)
   // https://stackoverflow.com/questions/73729434/what-is-the-alternative-for-match-in-react-router-dom-v6
-  const params=useParams();
+  let params=useParams();
   let navigate=useNavigate()
   // const product = products.find((p)=>p._id===params.id)
   const productDetails=useSelector(state=>state.productDetails)

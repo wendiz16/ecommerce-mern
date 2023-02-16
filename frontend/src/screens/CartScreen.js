@@ -1,6 +1,6 @@
 import React, {useEffect}from 'react'
 import {useDispatch,useSelector} from 'react-redux'
-import {useParams,useSearchParams,Link,useNavigate} from 'react-router-dom';
+import {useParams,useLocation,Link,useNavigate} from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import {Row, Col, ListGroup,Image, Button,Card, ListGroupItem} from 'react-bootstrap'
 import Message from '../components/Message'
@@ -8,17 +8,20 @@ import {addToCart,removeFromCart} from '../actions/cartActions'
 
 
 const CartScreen = () => {
-  const params=useParams();
+  let params=useParams()
   let navigate=useNavigate()
-  const productId= params.id
+  let productId= params.id
+  const location = useLocation()
   //https://stackoverflow.com/questions/73262988/react-router-v6-history-location-search-replacement
-  const [searchParams, setSearchParams]= useSearchParams()
-  const qty=searchParams.get("qty")?Number(searchParams.get("qty")):1
-  console.log(typeof qty)
+  // const [searchParams, setSearchParams]= useSearchParams()
+  // const qty=searchParams.get("qty")?Number(searchParams.get("qty")):1
+  // console.log(typeof qty)
+  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
   const dispatch =useDispatch()
   const cart=useSelector(state=>state.cart)
   const { cartItems } =cart
-  console.log(cartItems)
+  
+  // console.log(cartItems)
   useEffect(()=>{
     if(productId){
       dispatch(addToCart(productId,qty))
@@ -30,7 +33,8 @@ const CartScreen = () => {
   }
 
   const checkoutHandler = ()=>{
-    navigate('/login?redirect=shipping')
+    navigate('/login?redirect=/shipping')
+    
   }
   return (
    <Row>
