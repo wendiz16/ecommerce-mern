@@ -4,15 +4,21 @@ import Form from 'react-bootstrap/Form';
 import{ Button } from 'react-bootstrap'
 import { useDispatch,useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
+import { saveShippingAddress } from '../actions/cartActions';
 const ShippingScreen = () => {
-  const [address, setAddress] =useState('')
-  const [city, setCity] =useState('')
-  const [postalcode, setPostalCode] =useState('')
-  const [country, setCountry] =useState('')
-
+  
+  const navigate=useNavigate();
+  const cart =useSelector(state=>state.cart)
+  const {shippingAddress}=cart
+  const [address, setAddress] =useState(shippingAddress.address)
+  const [city, setCity] =useState(shippingAddress.city)
+  const [postalcode, setPostalCode] =useState(shippingAddress.postalcode)
+  const [country, setCountry] =useState(shippingAddress.country)
+  const dispatch=useDispatch()
   const submitHandler =(e)=>{
    e.preventDefault()
-   console.log('submit')
+   dispatch(saveShippingAddress({address, city, postalcode,country}))
+   navigate('/payment')
   }
   return (
     <FormContainer>
