@@ -38,7 +38,7 @@ const ShippingScreen = () => {
      </Form.Group>
 
      <Form.Group controlId='city'>
-      <Form.Label>Address</Form.Label>
+      <Form.Label>City</Form.Label>
       <Form.Control
       type='text'
       placeholder='Enter city'
