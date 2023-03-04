@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { useNavigate,useParams} from "react-router-dom"
+import {useParams} from "react-router-dom"
 import{ Button, Row,Col,ListGroup,Image,Card, ListGroupItem } from 'react-bootstrap'
 import { useDispatch,useSelector } from 'react-redux';
 import Message from '../components/Message'
@@ -9,13 +9,15 @@ import { getOrderDetails } from '../actions/orderActions';
 const OrderScreen = () => {
 
   const dispatch= useDispatch()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const params = useParams()
   const orderDetails=useSelector((state)=>state.orderDetails)
   const {order,loading,error}=orderDetails
   useEffect(()=>{
+   if(!order||order._id!==params.id){
     dispatch(getOrderDetails(params.id))
-  },[])
+   }
+  },[order, params.id])
   
   if(!loading){
     //calculate prices
