@@ -17,6 +17,17 @@ app.get('/',(req,res)=>{
 app.use('/api/products',productRoutes)
 app.use('/api/users',userRoutes)
 app.use('/api/orders', orderRoutes)
+
+app.get('/api/config/paypal',(req,res)=>
+  {
+    res.send(process.env.PAYPAL_CLIENT_ID)
+    // const test_id='1234'
+    // console.log("view process.env",process.env)
+    // res.send(test_id)
+  }
+
+
+)
 app.use(notFound)
 app.use(errorHandler)
 

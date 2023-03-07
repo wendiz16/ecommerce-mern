@@ -5,7 +5,7 @@ import {productListReducer,productDetailsReducer} from './reducers/productReduce
 import { cartReducer } from "./reducers/cartReducers"
 import {userLoginReducer, userRegisterReducer, 
   userDetailsReducer, userUpdateReducer} from './reducers/userReducers'
-import { orderCreateReducer,orderDetailsReducer } from "./reducers/orderReducers"
+import { orderCreateReducer,orderDetailsReducer,orderPayReducer } from "./reducers/orderReducers"
   const reducer = combineReducers({
  productList:productListReducer,
  productDetails:productDetailsReducer,
@@ -15,7 +15,8 @@ import { orderCreateReducer,orderDetailsReducer } from "./reducers/orderReducers
  userDetails:userDetailsReducer,
  userUpdate:userUpdateReducer,
  orderCreate:orderCreateReducer,
- orderDetails:orderDetailsReducer
+ orderDetails:orderDetailsReducer,
+ orderPay:orderPayReducer
 })
 
 const cartItemsFromStorage=localStorage.getItem('cartItems')? JSON.parse(localStorage.getItem('cartItems')):[]
