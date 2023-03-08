@@ -1,4 +1,5 @@
 import React, {useEffect,useState} from 'react'
+import { PAYPAL_CLIENT_ID, JWT_SECRET } from process.env
 import axios from 'axios'
 import {
   PayPalScriptProvider,
@@ -18,16 +19,18 @@ import { getOrderDetails,payOrder } from '../actions/orderActions';
 
 
 // Custom component to wrap the PayPalButtons and handle currency changes
-const ButtonWrapper = ({ clientId, order, currency, onSuccess, showSpinner }) => {
+const ButtonWrapper = ({ order, currency, onApprove, showSpinner }) => {
   // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
   // This is the main reason to wrap the PayPalButtons in a new component
   const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
 
-  function run(){
+
+  async function run(){
+    const {data:clientId}=await axios.get('/api/config/paypal')
     dispatch({
         type: "resetOptions",
         value: {
-          "client-id": clientId,
+          "client-id": PAYPAL_CLIENT_ID,
           components: "buttons",
           currency: currency
         },
@@ -36,43 +39,13 @@ const ButtonWrapper = ({ clientId, order, currency, onSuccess, showSpinner }) =>
 
 
   useEffect(() => {run()}, [showSpinner]);
-  // console.log("total price: ", order.totalPrice)
-
-
-  const createOrder = (data,actions) => {
-    return actions.order
-    .create({
-        purchase_units: [
-            {
-                amount: {
-                    currency_code: currency,
-                    value: order.totalPrice,
-                },
-            },
-        ],
-    })
-    .then((orderId) => {
-        // Your code here after create the order
-        return orderId;
-    });
-  }
-
-  const onApprove = (data, actions) => {
-    return actions.order.capture().then(function () {
-        // Your code here after capture the order
-        // console.log(data)
-        // console.log(actions)
-        onSuccess(data);
-    });
-}
 
 
   return (<>
           { (showSpinner && isPending) && <div className="spinner" /> }
           <PayPalButtons
-              createOrder={(data, actions) => createOrder(data,actions)}
-            // amount={order.totalPrice}
-            onApprove={(data, actions) => onApprove(data,actions)}
+              amount={order.totalPrice}
+              onApprove={onApprove}
           />
       </>
   );
@@ -82,13 +55,10 @@ const ButtonWrapper = ({ clientId, order, currency, onSuccess, showSpinner }) =>
 
 
 
-
 const OrderScreen = () => {
 
   const dispatch= useDispatch()
-  // const [sdkReady, setSdkReady] = useState(false)
-  const [paypalClientID,setPaypalClientID]=useState('')
-
+  const [sdkReady, setSdkReady] = useState(false)
   const params = useParams()
 
   const orderDetails=useSelector((state)=>state.orderDetails)
@@ -97,30 +67,32 @@ const OrderScreen = () => {
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, success: successPay } = orderPay
 
-  // const PAYPAL_CLIENT_ID= async() =>{
-  //   const {data:clientId}=await axios.get('/api/config/paypal')
-  //   return clientId;
-  // }
+
   useEffect(()=>{
-   const updatePaypalClientID=async()=>{
-    const {data:clientId}=await axios.get('/api/config/paypal')
-    setPaypalClientID(clientId);
-   }
-   updatePaypalClientID()
-  //  setSdkReady(true)
-  //  console.log("print id", process.env)
+  //  const addPayPalScript=async()=>{
+  //   const {data:clientId}=await axios.get('/api/config/paypal')
+  //   const script = document.createElement('script')
+  //     script.type = 'text/javascript'
+  //     script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+  //     script.async = true
+  //     script.onload = () => {
+  //       setSdkReady(true)
+  //     }
+  //     document.body.appendChild(script)
+  //  }
+   
    if(!order||successPay||order._id!==params.id){
     dispatch({type:ORDER_PAY_RESET})
     dispatch(getOrderDetails(params.id))
-  }
-  //  }else if(!order.isPaid){
-  //   setSdkReady(true)
-  //    if(!window.paypal){
-  //     addPayPalScript()
-  //    }else{
-  //     setSdkReady(true)
-  //    }
-   },[dispatch, successPay, order, params.id])
+   }else if(!order.isPaid){
+    setSdkReady(true)
+    //  if(!window.paypal){
+    //   addPayPalScript()
+    //  }else{
+    //   setSdkReady(true)
+    //  }
+   }
+  },[dispatch, successPay, order, params.id])
   
   if(!loading){
     //calculate prices
@@ -132,7 +104,7 @@ const OrderScreen = () => {
   }
   
   const successPaymentHandler = (paymentResult) => {
-    console.log("paymentResult:", paymentResult,params.id)
+    console.log(paymentResult)
     dispatch(payOrder(params.id, paymentResult))
   }
 
@@ -240,24 +212,24 @@ const OrderScreen = () => {
               {!order.isPaid && (
                 <ListGroupItem>
                   {loadingPay && <Loader />}
-
-                  {
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
                     <PayPalScriptProvider
                         options={{
-                            "client-id": paypalClientID,
+                            "client-id": process.env.PAYPAL_CLIENT_ID,
                             components: "buttons",
                             currency: currency
                         }}
                     >
                       <ButtonWrapper
-                                  clientId={paypalClientID}
                                   order={order}
                                   currency={currency}
-                                  onSuccess={successPaymentHandler}
-                                  showSpinner={true}
+                                  onApprove={successPaymentHandler}
+                                  showSpinner={false}
                               />
                     </PayPalScriptProvider>
-                    }
+                    )}
                  </ListGroupItem>
                   )}
             </ListGroup>
