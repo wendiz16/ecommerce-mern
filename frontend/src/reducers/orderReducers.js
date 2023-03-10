@@ -22,13 +22,16 @@ export const orderCreateReducer =(state={}, action)=>{
      return {
          loading:false,
          success:true,
-         order:action.payload
+          order: action.payload,
        } 
      case ORDER_CREATE_FAIL:
      return {
        loading:false,
        error:action.payload
        } 
+
+     case ORDER_PAY_RESET:
+        return {}
      default:
        return state
   }

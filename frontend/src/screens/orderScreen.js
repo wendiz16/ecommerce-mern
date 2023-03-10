@@ -17,76 +17,10 @@ import {
 import { getOrderDetails,payOrder } from '../actions/orderActions';
 
 
-// Custom component to wrap the PayPalButtons and handle currency changes
-const ButtonWrapper = ({ clientId, order, currency, onSuccess, showSpinner }) => {
-  // usePayPalScriptReducer can be use only inside children of PayPalScriptProviders
-  // This is the main reason to wrap the PayPalButtons in a new component
-  const [{ options, isPending }, dispatch] = usePayPalScriptReducer();
-
-  function run(){
-    dispatch({
-        type: "resetOptions",
-        value: {
-          "client-id": clientId,
-          components: "buttons",
-          currency: currency
-        },
-    })
-  }
-
-
-  useEffect(() => {run()}, [showSpinner]);
-  // console.log("total price: ", order.totalPrice)
-
-
-  const createOrder = (data,actions) => {
-    return actions.order
-    .create({
-        purchase_units: [
-            {
-                amount: {
-                    currency_code: currency,
-                    value: order.totalPrice,
-                },
-            },
-        ],
-    })
-    .then((orderId) => {
-        // Your code here after create the order
-        return orderId;
-    });
-  }
-
-  const onApprove = (data, actions) => {
-    return actions.order.capture().then(function () {
-        // Your code here after capture the order
-        // console.log(data)
-        // console.log(actions)
-        onSuccess(data);
-    });
-}
-
-
-  return (<>
-          { (showSpinner && isPending) && <div className="spinner" /> }
-          <PayPalButtons
-              createOrder={(data, actions) => createOrder(data,actions)}
-            // amount={order.totalPrice}
-            onApprove={(data, actions) => onApprove(data,actions)}
-          />
-      </>
-  );
-}
-
-
-
-
-
-
 const OrderScreen = () => {
 
   const dispatch= useDispatch()
-  // const [sdkReady, setSdkReady] = useState(false)
+
   const [paypalClientID,setPaypalClientID]=useState('')
 
   const params = useParams()
@@ -97,29 +31,18 @@ const OrderScreen = () => {
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, success: successPay } = orderPay
 
-  // const PAYPAL_CLIENT_ID= async() =>{
-  //   const {data:clientId}=await axios.get('/api/config/paypal')
-  //   return clientId;
-  // }
   useEffect(()=>{
    const updatePaypalClientID=async()=>{
     const {data:clientId}=await axios.get('/api/config/paypal')
     setPaypalClientID(clientId);
    }
    updatePaypalClientID()
-  //  setSdkReady(true)
-  //  console.log("print id", process.env)
+ 
    if(!order||successPay||order._id!==params.id){
     dispatch({type:ORDER_PAY_RESET})
     dispatch(getOrderDetails(params.id))
   }
-  //  }else if(!order.isPaid){
-  //   setSdkReady(true)
-  //    if(!window.paypal){
-  //     addPayPalScript()
-  //    }else{
-  //     setSdkReady(true)
-  //    }
+  
    },[dispatch, successPay, order, params.id])
   
   if(!loading){
@@ -137,6 +60,54 @@ const OrderScreen = () => {
   }
 
   const currency="USD"
+
+  
+  
+ // Custom component to wrap the PayPalButtons and handle currency changes
+const ButtonWrapper = ({ order, currency, onSuccess, showSpinner }) => {
+  // usePayPalScriptReducer can be used only inside children of PayPalScriptProviders
+  // This is the main reason to wrap the PayPalButtons in a new component
+  const [ {isPending} ] = usePayPalScriptReducer();
+
+  const createOrder = (data,actions) => {
+    return actions.order
+    .create({
+        purchase_units: [
+            {
+                amount: {
+                    currency_code: currency,
+                    value: order.totalPrice,
+                },
+            },
+        ],
+    })
+    .then((orderId) => {
+        // Your code here after create the order
+        // console.log("createOrder, orderId:", orderId)
+        return orderId;
+    });
+  }
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(function (res) {
+        // Your code here after capture the order
+        //https://stackoverflow.com/questions/60660452/paypal-smart-buttons-is-there-any-way-onapprove-runs-without-the-payment-having
+        //https://developer.paypal.com/demo/checkout/#/pattern/server
+        onSuccess(res);
+    });
+}
+
+
+  return (<>
+          { (showSpinner && isPending) && <div className="spinner" /> }
+          <PayPalButtons
+              createOrder={(data, actions) => createOrder(data,actions)}
+            onApprove={(data, actions) => onApprove(data,actions)}
+          />
+      </>
+  );
+}
+
 
   return  loading?<Loader/>:error?<Message variant='danger'>
    {error}
@@ -250,11 +221,10 @@ const OrderScreen = () => {
                         }}
                     >
                       <ButtonWrapper
-                                  clientId={paypalClientID}
                                   order={order}
                                   currency={currency}
                                   onSuccess={successPaymentHandler}
-                                  showSpinner={true}
+                                  showSpinner={false}
                               />
                     </PayPalScriptProvider>
                     }
