@@ -11,7 +11,10 @@ USER_LIST_RESET,
 USER_DELETE_REQUEST,
 USER_DELETE_SUCCESS,
 USER_DELETE_FAIL,
-
+USER_UPDATE_INFO_REQUEST,
+USER_UPDATE_INFO_SUCCESS,
+USER_UPDATE_INFO_FAIL,
+USER_UPDATE_INFO_RESET
 } from '../constants/userConstants'
 
 export const userLoginReducer=(state={},action)=>{
@@ -98,3 +101,19 @@ export const userDeleteReducer = (state = {}, action) => {
   }
 }
 
+export const userUpdateInfoReducer = (state = { user: {} }, action) => {
+  switch (action.type) {
+    case USER_UPDATE_INFO_REQUEST:
+      return { loading: true }
+    case USER_UPDATE_INFO_SUCCESS:
+      return { loading: false, success: true }
+    case USER_UPDATE_INFO_FAIL:
+      return { loading: false, error: action.payload }
+    case USER_UPDATE_INFO_RESET:
+      return {
+        user: {},
+      }
+    default:
+      return state
+  }
+}

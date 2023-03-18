@@ -24,7 +24,7 @@ const UserListScreen = () => {
       dispatch(listUsers())
     } else {
       navigate('/login')
-    }},[dispatch,navigate,successDelete]
+    }},[dispatch,navigate,successDelete,userInfo]
    )
   
   const deleteHandler = (id) => {
