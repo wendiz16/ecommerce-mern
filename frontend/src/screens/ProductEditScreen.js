@@ -2,7 +2,8 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import {useNavigate, useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { Form, Button } from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
+import Form from 'react-bootstrap/Form'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -137,12 +138,13 @@ const ProductEditScreen = () => {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
-              <Form.File
+              <Form.Control
+                type='file'
                 id='image-file'
                 label='Choose File'
                 custom
                 onChange={uploadFileHandler}
-              ></Form.File> 
+              ></Form.Control> 
               {uploading && <Loader />}
             </Form.Group>
 

@@ -6,15 +6,15 @@ import {
   usePayPalScriptReducer
 } from "@paypal/react-paypal-js";
 import {useParams} from "react-router-dom"
-import{Row,Col,ListGroup,Image,Card, ListGroupItem } from 'react-bootstrap'
+import{Row,Col,ListGroup,Image,Card, ListGroupItem, Button} from 'react-bootstrap'
 import { useDispatch,useSelector } from 'react-redux';
 import Message from '../components/Message'
 import { Link } from 'react-router-dom';
 import Loader from'../components/Loader'
 import {
-  ORDER_PAY_RESET
+  ORDER_PAY_RESET, ORDER_DELIVER_RESET
 } from '../constants/orderConstants'
-import { getOrderDetails,payOrder } from '../actions/orderActions';
+import { getOrderDetails,payOrder, deliverOrder} from '../actions/orderActions';
 
 
 const OrderScreen = () => {
@@ -30,6 +30,12 @@ const OrderScreen = () => {
 
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, success: successPay } = orderPay
+  
+  const orderDeliver = useSelector((state) => state.orderDeliver)
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   useEffect(()=>{
    const updatePaypalClientID=async()=>{
@@ -38,8 +44,9 @@ const OrderScreen = () => {
    }
    updatePaypalClientID()
  
-   if(!order||successPay||order._id!==params.id){
+   if(!order||successPay||successDeliver||order._id!==params.id){
     dispatch({type:ORDER_PAY_RESET})
+    dispatch({type: ORDER_DELIVER_RESET})
     dispatch(getOrderDetails(params.id))
   }
   
@@ -55,12 +62,14 @@ const OrderScreen = () => {
   }
   
   const successPaymentHandler = (paymentResult) => {
-    console.log("paymentResult:", paymentResult,params.id)
     dispatch(payOrder(params.id, paymentResult))
   }
 
   const currency="USD"
-
+  
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order))
+  }
   
   
  // Custom component to wrap the PayPalButtons and handle currency changes
@@ -230,6 +239,21 @@ const ButtonWrapper = ({ order, currency, onSuccess, showSpinner }) => {
                     }
                  </ListGroupItem>
                   )}
+                   {loadingDeliver && <Loader />}
+                 {userInfo &&
+                  userInfo.isAdmin &&
+                  order.isPaid &&
+                   !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
