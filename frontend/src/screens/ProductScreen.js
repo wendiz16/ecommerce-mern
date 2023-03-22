@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from 'react';
 import {Link, useParams,useNavigate} from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
+import Meta from '../components/Meta'
 import {useDispatch, useSelector} from 'react-redux'
 import {Row, Col, Image, ListGroup, Card, Button, ListGroupItem} from 'react-bootstrap';
 import Rating from '../components/Rating'
@@ -64,6 +65,7 @@ const ProductScreen = () => {
     </Link>
     {loading ?<Loader/>: error ?<Message variant='danger'>{error}</Message>:(
       <>
+       <Meta title={product.name} />
        <Row>
       <Col md={6}>
         <Image src={product.image} alt={product.name} fluid></Image>
