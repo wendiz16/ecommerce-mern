@@ -1,5 +1,5 @@
 # Ecommerce-My Store 🛍️
-A full stack e-commerce platform using React, Node.js, and MongoDB. The platform includes a fully featured shopping cart, product reviews and ratings, a top 
+A full stack e-commerce platform using React, Node.js, Express.js and MongoDB Atlas. The platform includes a fully featured shopping cart, product reviews and ratings, a top 
 products carousel, product pagination, product search feature, user profile with orders, and admin product and user management. Additionally, the platform 
 includes an admin order details page, the ability to mark orders as delivered, and a checkout process with shipping, payment method, and PayPal/credit card 
 integration. Finally, a database seeder is included for products and users.
