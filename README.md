@@ -21,6 +21,8 @@ integration. Finally, a database seeder is included for products and users.
 ![ProductsScreen](https://github.com/wendiz16/ecommerce-mern/blob/main/screenshots/admin-productpage.png 'Products Page')
 ![OrdersScreen](https://github.com/wendiz16/ecommerce-mern/blob/main/screenshots/admin-orderpage.png 'Orders Page')
 ![UsersScreen](https://github.com/wendiz16/ecommerce-mern/blob/main/screenshots/admin-userpage.png 'Users Page')
+### Paypal 
+![PaypalScreen](https://github.com/wendiz16/ecommerce-mern/blob/main/screenshots/paypalpayment-page.png 'Paypal Page')
 # Happy Shopping!
 
 
