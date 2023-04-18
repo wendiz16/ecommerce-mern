@@ -3,6 +3,13 @@ A full stack e-commerce platform using React, Node.js, Express.js and MongoDB At
 products carousel, product pagination, product search feature, user profile with orders, and admin product and user management. Additionally, the platform 
 includes an admin order details page, the ability to mark orders as delivered, and a checkout process with shipping, payment method, and PayPal/credit card 
 integration. Finally, a database seeder is included for products and users.
+## Techstack 
+- React and Redux
+- Node.js & Express.js 
+- MongoDB Atlas
+- Bootstrap
+- Paypal Integration 
+- Docker 
 ## Screenshots
 ### HomeScreen
 ![ProductsScreen](https://github.com/wendiz16/ecommerce-mern/blob/main/screenshots/productpage1.png 'Home Page')
