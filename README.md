@@ -10,7 +10,9 @@ integration. Finally, a database seeder is included for products and users.
 - Bootstrap
 - Paypal Integration 
 - Docker 
-## Screenshots
+## Usage
+- clone package and run docker compose up in your terminal 
+## Screenshots   
 ### HomeScreen
 ![ProductsScreen](https://github.com/wendiz16/ecommerce-mern/blob/main/screenshots/productpage1.png 'Home Page')
 ![ProductDetailScreen](https://github.com/wendiz16/ecommerce-mern/blob/main/screenshots/productpage-2.png 'Product Detail Page')
