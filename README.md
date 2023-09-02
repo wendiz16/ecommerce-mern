@@ -1,4 +1,6 @@
 # Ecommerce-My Store 🛍️
+View live site [here](https://ecommerce-n7pr.onrender.com/).
+
 A full stack e-commerce platform using React, Node.js, Express.js and MongoDB Atlas. The platform includes a fully featured shopping cart, product reviews and ratings, a top 
 products carousel, product pagination, product search feature, user profile with orders, and admin product and user management. Additionally, the platform 
 includes an admin order details page, the ability to mark orders as delivered, and a checkout process with shipping, payment method, and PayPal/credit card 
